@@ -1,0 +1,220 @@
+{
+  "metadata": {
+    "description": "Proton donor and acceptor atom definitions per residue, used for hydrogen-bond interaction detection in protein-ligand analysis. 'acceptors_antecedent' lists the antecedent (bonded) atom used to compute the Donor-Acceptor-Antecedent angle for acceptors with a defined geometry. 'special' covers non-standard donor/acceptor-like interactions (e.g. heme iron).",
+    "residue_note": "HID/HIE/HIP are protonation-state variants of histidine (delta-protonated, epsilon-protonated, doubly-protonated) as commonly named in AMBER/CHARMM force fields."
+  },
+  "acceptors": {
+    "ALA": [
+      "O"
+    ],
+    "GLY": [
+      "O"
+    ],
+    "ILE": [
+      "O"
+    ],
+    "LEU": [
+      "O"
+    ],
+    "PRO": [
+      "O"
+    ],
+    "VAL": [
+      "O"
+    ],
+    "PHE": [
+      "O"
+    ],
+    "TRP": [
+      "O"
+    ],
+    "TYR": [
+      "O",
+      "OH"
+    ],
+    "ASP": [
+      "O",
+      "OD1",
+      "OD2"
+    ],
+    "GLU": [
+      "O",
+      "OE1",
+      "OE2"
+    ],
+    "ARG": [
+      "O"
+    ],
+    "HIS": [
+      "O"
+    ],
+    "LYS": [
+      "O"
+    ],
+    "SER": [
+      "O",
+      "OG"
+    ],
+    "THR": [
+      "O",
+      "OG1"
+    ],
+    "CYS": [
+      "O"
+    ],
+    "MET": [
+      "O"
+    ],
+    "ASN": [
+      "O",
+      "OD1"
+    ],
+    "GLN": [
+      "O",
+      "OE1"
+    ],
+    "HID": [
+      "O",
+      "NE2"
+    ],
+    "HIE": [
+      "O",
+      "ND1"
+    ]
+  },
+  "acceptors_antecedent": {
+    "TYR": {
+      "OH": "CZ"
+    },
+    "ASP": {
+      "OD1": "CG",
+      "OD2": "CG"
+    },
+    "GLU": {
+      "OE1": "CD",
+      "OE2": "CD"
+    },
+    "SER": {
+      "OG": "CB"
+    },
+    "THR": {
+      "OG1": "CB"
+    },
+    "ASN": {
+      "OD1": "CG"
+    },
+    "GLN": {
+      "OE1": "CD"
+    },
+    "HID": {},
+    "HIE": {}
+  },
+  "donors": {
+    "ALA": [
+      "N"
+    ],
+    "GLY": [
+      "N"
+    ],
+    "ILE": [
+      "N"
+    ],
+    "LEU": [
+      "N"
+    ],
+    "PRO": [
+      "N"
+    ],
+    "VAL": [
+      "N"
+    ],
+    "PHE": [
+      "N"
+    ],
+    "TRP": [
+      "N",
+      "HE1",
+      "NE1"
+    ],
+    "TYR": [
+      "N",
+      "HH"
+    ],
+    "ASP": [
+      "N"
+    ],
+    "GLU": [
+      "N"
+    ],
+    "ARG": [
+      "N",
+      "HNE",
+      "HH11",
+      "HH12",
+      "HH21",
+      "HH22",
+      "HE",
+      "NE",
+      "NH1",
+      "NH2"
+    ],
+    "HIS": [
+      "N",
+      "ND1",
+      "NE2"
+    ],
+    "LYS": [
+      "N",
+      "HZ1",
+      "HZ2",
+      "HZ3",
+      "NZ"
+    ],
+    "SER": [
+      "N",
+      "HG"
+    ],
+    "THR": [
+      "N",
+      "HG1"
+    ],
+    "CYS": [
+      "N"
+    ],
+    "MET": [
+      "N"
+    ],
+    "ASN": [
+      "N",
+      "HD21",
+      "HD22",
+      "ND",
+      "ND2"
+    ],
+    "GLN": [
+      "N",
+      "HE21",
+      "HE22",
+      "NE2"
+    ],
+    "HID": [
+      "N",
+      "HD1"
+    ],
+    "HIE": [
+      "N",
+      "HE2"
+    ],
+    "HIP": [
+      "HE2",
+      "HD1"
+    ]
+  },
+  "special": {
+    "HEM": {
+      "atom": "FE",
+      "distance": 1.59,
+      "comment": "Fe central del grupo hemo"
+    }
+  }
+}

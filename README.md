@@ -7,6 +7,7 @@ A collection of small, standalone tools, datasets, and scripts I use across diff
 | File | Description |
 |------|-------------|
 | [`ligands_trash.json`](./ligands_trash.json) | Curated list of PDB heteroatom/ligand codes considered "trash" or non-relevant when parsing PDB structures — solvents, ions, buffers, detergents, standard amino acids, common cofactors (NAD/FAD families, nucleotides), and lipids. Useful for filtering out uninteresting HETATM records when scanning PDB files for real ligands of interest. |
+| [`proton_donors_acceptors.json`](./proton_donors_acceptors.json) | Proton donor and acceptor atom definitions per standard residue (including histidine protonation variants HID/HIE/HIP), used for hydrogen-bond detection in protein-ligand interaction analysis. Also includes antecedent atoms for donor-acceptor-antecedent angle calculations and a `special` section for non-standard cases like heme iron. |
 
 ## `ligands_trash.json`
 
@@ -72,6 +73,59 @@ jq '.trash_ligands' ligands_trash.json
 ```
 
 Being plain JSON, it can be loaded from any language or tool (Python, R, JavaScript, MATLAB, etc.) with no extra parsing logic.
+
+## `proton_donors_acceptors.json`
+
+### Structure
+
+```json
+{
+  "metadata": {
+    "description": "...",
+    "residue_note": "..."
+  },
+  "acceptors": {
+    "TYR": ["O", "OH"],
+    "ASP": ["O", "OD1", "OD2"]
+  },
+  "acceptors_antecedent": {
+    "TYR": {"OH": "CZ"},
+    "ASP": {"OD1": "CG", "OD2": "CG"}
+  },
+  "donors": {
+    "TYR": ["N", "HH"],
+    "ARG": ["N", "HNE", "HH11", "HH12", "HH21", "HH22", "HE", "NE", "NH1", "NH2"]
+  },
+  "special": {
+    "HEM": {"atom": "FE", "distance": 1.59, "comment": "..."}
+  }
+}
+```
+
+- **`acceptors`** – acceptor atom names per standard residue (3-letter code), used to detect hydrogen-bond acceptors.
+- **`acceptors_antecedent`** – for acceptors with a defined geometry, the antecedent (bonded) atom needed to compute the Donor-Acceptor-Antecedent angle.
+- **`donors`** – donor atom names per residue, including histidine protonation-state variants (`HID`, `HIE`, `HIP`) as commonly named in AMBER/CHARMM force fields.
+- **`special`** – non-standard donor/acceptor-like interactions that don't fit the residue-based scheme, e.g. the heme iron with its own contact distance.
+
+### Usage
+
+**Python**
+
+```python
+import json
+
+with open("proton_donors_acceptors.json") as f:
+    hb_data = json.load(f)
+
+acceptors = hb_data["acceptors"]
+donors = hb_data["donors"]
+
+# atoms accepted by TYR
+tyr_acceptors = acceptors["TYR"]  # ['O', 'OH']
+
+# antecedent atom for a given acceptor atom, if defined
+antecedent = hb_data["acceptors_antecedent"].get("TYR", {}).get("OH")  # 'CZ'
+```
 
 ## Philosophy
 
