@@ -8,6 +8,7 @@ A collection of small, standalone tools, datasets, and scripts I use across diff
 |------|-------------|
 | [`ligands_trash.json`](./ligands_trash.json) | Curated list of PDB heteroatom/ligand codes considered "trash" or non-relevant when parsing PDB structures — solvents, ions, buffers, detergents, standard amino acids, common cofactors (NAD/FAD families, nucleotides), and lipids. Useful for filtering out uninteresting HETATM records when scanning PDB files for real ligands of interest. |
 | [`proton_donors_acceptors.json`](./proton_donors_acceptors.json) | Proton donor and acceptor atom definitions per standard residue (including histidine protonation variants HID/HIE/HIP), used for hydrogen-bond detection in protein-ligand interaction analysis. Also includes antecedent atoms for donor-acceptor-antecedent angle calculations and a `special` section for non-standard cases like heme iron. |
+| [`chi_angles.json`](./chi_angles.json) | Chi (side-chain) dihedral angle atom definitions per residue (chi1-chi5), used to compute rotamer torsion angles from PDB coordinates. Each dihedral is given as an ordered 4-atom string ready to split and feed into a standard dihedral-angle formula. |
 
 ## `ligands_trash.json`
 
@@ -125,6 +126,44 @@ tyr_acceptors = acceptors["TYR"]  # ['O', 'OH']
 
 # antecedent atom for a given acceptor atom, if defined
 antecedent = hb_data["acceptors_antecedent"].get("TYR", {}).get("OH")  # 'CZ'
+```
+
+## `chi_angles.json`
+
+### Structure
+
+```json
+{
+  "metadata": {
+    "description": "...",
+    "residue_note": "...",
+    "angle_definition": "..."
+  },
+  "chi_angles": {
+    "chi1": {"ARG": "N-CA-CB-CG", "TYR": "N-CA-CB-CG"},
+    "chi2": {"ARG": "CA-CB-CG-CD", "TYR": "CA-CB-CG-CD1"},
+    "chi3": {"ARG": "CB-CG-CD-NE"},
+    "chi4": {"ARG": "CG-CD-NE-CZ"},
+    "chi5": {"ARG": "CD-NE-CZ-NH1"}
+  }
+}
+```
+
+- **`chi_angles`** – one sub-object per chi angle (`chi1`-`chi5`). Each maps a residue's 3-letter code to a dash-separated string of the 4 atom names defining that dihedral, in order (A-B-C-D, measured around the B-C bond).
+- Residues without a given chi angle (e.g. `ALA`/`GLY` have none; `VAL`/`THR`/`SER` etc. only have `chi1`) are simply absent from that sub-object.
+
+### Usage
+
+**Python**
+
+```python
+import json
+import numpy as np
+
+with open("chi_angles.json") as f:
+    chi_angles = json.load(f)["chi_angles"]
+
+atoms = chi_angles["chi1"]["TYR"].split("-")  # ['N', 'CA', 'CB', 'CG']
 ```
 
 ## Philosophy
